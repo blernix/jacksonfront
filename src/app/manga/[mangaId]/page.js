@@ -1,9 +1,7 @@
 // src/app/manga/[mangaId]/page.js
 
 import { notFound } from 'next/navigation';
-import { Container, Typography, Grid, Box, Card, CardContent, Button, IconButton } from '@mui/material';
-import Link from 'next/link';
-import sanitizeHtml from 'sanitize-html';
+import { Container } from '@mui/material';
 import Navbar from '@/components/Navbar';
 import Footer from '@/app/footer/Footer';
 import MangaDetailContent from '@/components/MangaDetailContent';
@@ -11,12 +9,12 @@ import MangaDetailContent from '@/components/MangaDetailContent';
 async function fetchMangaData(mangaId) {
   try {
     // Fetch manga data
-    const resManga = await fetch(`http://localhost:3000/api/manga/${mangaId}`, { cache: 'no-store' });
+    const resManga = await fetch(`/api/manga/${mangaId}`, { cache: 'no-store' });
     if (!resManga.ok) notFound();
     const manga = await resManga.json();
 
     // Fetch chapters
-    const resChapters = await fetch(`http://localhost:3000/api/chapter?mangaId=${mangaId}`, { cache: 'no-store' });
+    const resChapters = await fetch(`/api/chapter?mangaId=${mangaId}`, { cache: 'no-store' });
     if (!resChapters.ok) notFound();
     const chapters = await resChapters.json();
 
