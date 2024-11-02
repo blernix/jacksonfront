@@ -6,6 +6,7 @@ import AddIcon from '@mui/icons-material/Add';
 import CloseIcon from '@mui/icons-material/Close';
 import Link from 'next/link';
 import sanitizeHtml from 'sanitize-html';
+import Image from 'next/image';
 
 const MangaDetailContent = ({ manga, chapters }) => {
   const [showDescription, setShowDescription] = useState(false);
@@ -23,11 +24,7 @@ const MangaDetailContent = ({ manga, chapters }) => {
 
         <Box position="relative" display="inline-block">
           {manga.coverImage && (
-            <img
-              src={manga.coverImage}
-              alt={manga.title}
-              style={{ maxWidth: '100%', height: 'auto', borderRadius: '8px', marginTop: '16px' }}
-            />
+           <Image src={manga.coverImage} alt={manga.title} layout="responsive" width={500} height={300} />
           )}
           
           {/* Button to reveal description */}

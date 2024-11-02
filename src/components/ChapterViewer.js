@@ -8,6 +8,8 @@ import { Box, Typography, IconButton, LinearProgress, Button } from '@mui/materi
 import FullscreenIcon from '@mui/icons-material/Fullscreen';
 import FullscreenExitIcon from '@mui/icons-material/FullscreenExit';
 import Link from 'next/link';
+import Image from 'next/image';
+
 
 const ChapterViewer = ({ pages, nextChapterUrl }) => {
   const [isFullScreen, setIsFullScreen] = useState(false);
@@ -98,16 +100,17 @@ const ChapterViewer = ({ pages, nextChapterUrl }) => {
                 height: '100%',
               }}
             >
-              <img
-                src={page}
-                alt={`Page ${index + 1}`}
-                style={{
-                  maxWidth: '100%',
-                  maxHeight: '90vh',
-                  borderRadius: '8px',
-                  margin: '0 auto',
-                }}
-              />
+           <Image
+  src={page}
+  alt={`Page ${index + 1}`}
+  layout="responsive"
+  width={500}
+  height={700} // ajustez selon le format d'affichage souhaité
+  style={{
+    borderRadius: '8px',
+    margin: '0 auto',
+  }}
+/>
             </Box>
           </SwiperSlide>
         ))}

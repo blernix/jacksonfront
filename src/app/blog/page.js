@@ -74,7 +74,7 @@ const BlogPage = () => {
             Bienvenue sur le Blog
           </Typography>
           <Typography variant="h6" color="textSecondary" sx={{ mb: 4 }}>
-            Explorons le monde, l'acceptation et l'inclusivité ensemble.
+            Explorons le monde, l&apos;acceptation et l&apos;inclusivité ensemble.
           </Typography>
           
           {/* Barre de recherche */}
