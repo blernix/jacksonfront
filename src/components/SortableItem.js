@@ -4,6 +4,7 @@ import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import DragHandleIcon from '@mui/icons-material/DragHandle';
 import DeleteIcon from '@mui/icons-material/Delete';
+import Image from 'next/image';
 
 const SortableItem = ({ id, file, onDelete }) => {
   const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id });
@@ -24,7 +25,7 @@ const SortableItem = ({ id, file, onDelete }) => {
       <IconButton {...listeners} {...attributes} sx={{ cursor: 'grab', mr: 1 }}>
         <DragHandleIcon />
       </IconButton>
-      <img src={file.preview} alt={file.name} style={{ width: 50, height: 50, marginRight: 8, objectFit: 'cover', borderRadius: '4px' }} />
+      <Image src={file.preview} alt={file.name} style={{ width: 50, height: 50, marginRight: 8, objectFit: 'cover', borderRadius: '4px' }} />
       <Typography variant="body2" sx={{ flexGrow: 1, color: 'black' }}>{file.name}</Typography>
       <IconButton onClick={() => onDelete(id)}>
         <DeleteIcon sx={{ color: 'black' }} />

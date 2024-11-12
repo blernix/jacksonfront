@@ -19,10 +19,10 @@ export default function LoginPage() {
         }}
       >
         <Typography variant="h4" gutterBottom sx={{ fontWeight: 'bold' }}>
-          Connexion à l'administration
+          Connexion à l&apos;administration
         </Typography>
         <Typography variant="body1" sx={{ color: '#b3b3b3', mb: 4 }}>
-          Veuillez vous connecter avec votre compte Google pour accéder à la zone d'administration.
+          Veuillez vous connecter avec votre compte Google pour accéder à la zone d&apos;administration.
         </Typography>
         <Button
           variant="contained"

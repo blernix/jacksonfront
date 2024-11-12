@@ -8,14 +8,6 @@ const RichTextEditor = ({ value, onChange }) => {
   const quillRef = useRef(null);
   const apiUrl = process.env.NEXT_PUBLIC_API_URL; // Adaptation pour Next.js
 
-  useEffect(() => {
-    if (quillRef.current) {
-      const quill = quillRef.current.getEditor();
-      if (quill && quill.getModule('toolbar')) {
-        quill.getModule('toolbar').addHandler('image', handleImageUpload);
-      }
-    }
-  }, []);
 
   const handleImageUpload = () => {
     console.log('Image upload triggered');
@@ -55,6 +47,15 @@ const RichTextEditor = ({ value, onChange }) => {
       };
     }
   };
+
+  useEffect(() => {
+    if (quillRef.current) {
+      const quill = quillRef.current.getEditor();
+      if (quill && quill.getModule('toolbar')) {
+        quill.getModule('toolbar').addHandler('image', handleImageUpload);
+      }
+    }
+  }, [handleImageUpload]);
 
   const modules = {
     toolbar: [

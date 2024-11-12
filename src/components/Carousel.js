@@ -100,88 +100,6 @@ const Carousel = ({ items, type, onDelete, onEdit, onEditChapter, fetchChapters,
     }
   };
 
-  // Mode carrousel pour mobile
-  if (isMobile) {
-    return (
-      <Box {...handlers} sx={{ overflow: 'hidden', width: '100%' }}>
-        <Box
-          sx={{
-            display: 'flex',
-            transform: `translateX(-${currentIndex * 100}%)`,
-            transition: 'transform 0.3s ease-out',
-          }}
-        >
-          {items.map((item, index) => (
-            <Box
-              key={index}
-              sx={{
-                minWidth: '100%',
-                padding: 2,
-                border: '1px solid rgba(255, 255, 255, 0.3)',
-                borderRadius: 2,
-                backgroundColor: 'rgba(255, 255, 255, 0.1)',
-                backdropFilter: 'blur(10px)',
-                display: 'flex',
-                flexDirection: 'column',
-              }}
-            >
-              <Typography variant="h6" gutterBottom>{item.title || "Titre manquant"}</Typography>
-              {renderItemDetails(item)}
-              
-              <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 'auto' }}>
-                {type === "manga" && (
-                  <IconButton 
-                    onClick={() => handleOpenDialog(item)} 
-                    sx={{ 
-                      backgroundColor: 'black', 
-                      color: 'white', 
-                      borderRadius: '50%', 
-                      padding: '8px',
-                      '&:hover': {
-                        backgroundColor: 'rgba(255, 255, 255, 0.1)',
-                      },
-                    }}
-                  >
-                    <VisibilityIcon />
-                  </IconButton>
-                )}
-                <IconButton 
-                  onClick={() => onEdit(item, type)} 
-                  sx={{ 
-                    backgroundColor: 'black', 
-                    color: 'white', 
-                    borderRadius: '50%', 
-                    padding: '8px',
-                    '&:hover': {
-                      backgroundColor: 'rgba(255, 255, 255, 0.1)',
-                    },
-                  }}
-                >
-                  <EditIcon />
-                </IconButton>
-                <IconButton
-                  onClick={() => onDelete(item._id, type)}
-                  sx={{ 
-                    backgroundColor: 'black', 
-                    color: 'white', 
-                    borderRadius: '50%', 
-                    padding: '8px',
-                    '&:hover': {
-                      backgroundColor: 'rgba(255, 255, 255, 0.1)',
-                    },
-                  }}
-                >
-                  <DeleteIcon />
-                </IconButton>
-              </Box>
-            </Box>
-          ))}
-        </Box>
-      </Box>
-    );
-  }
-
-  // Affichage en grille pour les autres résolutions
   return (
     <>
       <Grid container spacing={2} sx={{ mt: 2 }}>
@@ -252,25 +170,44 @@ const Carousel = ({ items, type, onDelete, onEdit, onEditChapter, fetchChapters,
         ))}
       </Grid>
 
-      <Dialog open={isDialogOpen} onClose={handleCloseDialog}>
-        <DialogTitle>Chapitres de {selectedManga?.title}</DialogTitle>
+      <Dialog
+        open={isDialogOpen}
+        onClose={handleCloseDialog}
+        maxWidth="sm"
+        fullWidth
+        sx={{
+          '& .MuiDialog-paper': {
+            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+            color: '#fff',
+            borderRadius: 2,
+            boxShadow: '0 0 15px rgba(255, 255, 255, 0.3)',
+            backdropFilter: 'blur(10px)',
+            padding: 2,
+          },
+        }}
+      >
+        <DialogTitle sx={{ borderBottom: '1px solid rgba(255, 255, 255, 0.3)', mb: 2 }}>
+          Chapitres de {selectedManga?.title}
+        </DialogTitle>
         <DialogContent>
           {currentChapters.map((chapter) => (
-            <Box key={chapter._id} sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', my: 1 }}>
+            <Box key={chapter._id} sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', my: 1, p: 1, borderBottom: '1px solid rgba(255, 255, 255, 0.1)' }}>
               <Typography variant="body2">{chapter.chapterTitle}</Typography>
               <Box>
-                <IconButton onClick={() => onEditChapter(chapter)} sx={{ color: 'primary.main' }}>
-                  <EditIcon />
+                <IconButton onClick={() => onEditChapter(chapter)} sx={{ color: '#2196f3' }}>
+                  <EditIcon sx={{ color: 'white' }} />
                 </IconButton>
-                <IconButton onClick={() => handleDeleteChapter(chapter._id)} sx={{ color: 'error.main' }}>
-                  <DeleteIcon />
+                <IconButton onClick={() => handleDeleteChapter(chapter._id)} sx={{ color: '#f44336' }}>
+                  <DeleteIcon sx={{ color: 'white' }} />
                 </IconButton>
               </Box>
             </Box>
           ))}
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCloseDialog} color="primary">Fermer</Button>
+          <Button onClick={handleCloseDialog} sx={{ color: '#fff', backgroundColor: 'rgba(255, 255, 255, 0.1)', '&:hover': { backgroundColor: 'rgba(255, 255, 255, 0.2)' } }}>
+            Fermer
+          </Button>
         </DialogActions>
       </Dialog>
     </>

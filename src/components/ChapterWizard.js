@@ -56,7 +56,7 @@ const ChapterWizard = ({ item, onClose, showNotification, refreshData }) => {
       }
     };
     fetchMangas();
-  }, []);
+  }, [showNotification]);
 
   const handleFilesUpload = async (event) => {
     const uploadedFiles = Array.from(event.target.files);
@@ -94,7 +94,7 @@ const ChapterWizard = ({ item, onClose, showNotification, refreshData }) => {
         files: files,
       });
     }
-  }, [selectedManga, chapterTitle, chapterNumber, files]);
+  }, [selectedManga, chapterTitle, chapterNumber, files, item]);
 
   const handleDeleteFile = (id) => {
     setFiles((prevFiles) => prevFiles.filter((file) => file.id !== id));

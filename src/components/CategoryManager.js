@@ -26,7 +26,7 @@ const CategoryManager = ({ apiUrl, showNotification, onEditCategory, currentCate
 
   useEffect(() => {
     fetchCategories();
-  }, []);
+  }, [fetchCategories]);
 
   useEffect(() => {
     if (currentCategory) {

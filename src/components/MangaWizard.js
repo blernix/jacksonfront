@@ -14,6 +14,7 @@ import {
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import axios from 'axios';
+import Image from 'next/image';
 
 const steps = ['Informations de base', 'Description et Auteur', 'Image de couverture'];
 
@@ -145,10 +146,10 @@ const MangaWizard = ({ item, onClose, showNotification, refreshData }) => {
                 '&:hover': { backgroundColor: 'rgba(255, 255, 255, 0.1)' },
               }}
             >
-              Télécharger l'image de couverture
+              Télécharger l&apos;image de couverture
               <input type="file" hidden onChange={handleCoverImageUpload} />
             </Button>
-            {coverImage && <img src={coverImage} alt="Cover Preview" style={{ marginTop: '16px', width: '100%' }} />}
+            {coverImage && <Image src={coverImage} alt="Cover Preview" style={{ marginTop: '16px', width: '100%' }} />}
           </Box>
         );
       default:
