@@ -16,6 +16,8 @@ export const authOptions = {
   },
   callbacks: {
     async jwt({ token, account, profile }) {
+      console.log("Google Account:", account); // Vérifie l’authentification de Google
+
       if (account) {
         token.id = profile.sub;
         token.email = profile.email;
@@ -26,6 +28,8 @@ export const authOptions = {
     },
     async session({ session, token }) {
       // Générez un token JWT personnalisé
+      console.log("Session JWT Token:", token); // Vérifie le token JWT personnalisé
+
       const jwtToken = jwt.sign(
         {
           id: token.id,
@@ -37,10 +41,11 @@ export const authOptions = {
         { expiresIn: '1h' }
       );
       session.jwtToken = jwtToken; // Incluez le token JWT dans la session
+      console.log("jwtToken:", jwtToken);
       return session;
     },
     async redirect({ url, baseUrl }) {
-      return 'http://localhost:8100/dashboard';
+      return 'http://localhost:3000/dashboard';
     },
   },
 };

@@ -7,31 +7,14 @@ import validator from 'validator';
 import jwt from 'jsonwebtoken';
 import { NextResponse } from 'next/server';
 import mongoose from 'mongoose';
-
-// Middleware pour la vérification du token
-async function verifyToken(request) {
-  const authHeader = request.headers.get('Authorization');
-  if (!authHeader || !authHeader.startsWith('Bearer ')) {
-    console.log("Échec de l'authentification : Aucun token fourni.");
-    return null;
-  }
-
-  const token = authHeader.substring(7);
-  try {
-    const decoded = jwt.verify(token, process.env.NEXTAUTH_SECRET);
-    return decoded;
-  } catch (err) {
-    console.log("Token invalide :", err);
-    return null;
-  }
-}
+import { verifyToken } from '@/lib/authUtils'; // Utilisation d'un module utilitaire pour la vérification de token
 
 // Route OPTIONS
 export async function OPTIONS() {
   return new Response(null, {
-      status: 204,
+    status: 204,
     headers: {
-      'Access-Control-Allow-Origin': 'http://localhost:8100',
+      'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS, PATCH',
       'Access-Control-Allow-Headers': 'Content-Type, Authorization',
       'Access-Control-Allow-Credentials': 'true',
@@ -39,24 +22,52 @@ export async function OPTIONS() {
   });
 }
 
-// Route GET - Récupérer tous les chapitres pour un manga donné
+// Route GET - Récupérer les chapitres d’un manga spécifique ou tous les mangas avec leur nombre de chapitres
 export async function GET(request) {
   try {
     await connectToDatabase();
-
+    
+    // Récupère le paramètre mangaId s’il est fourni dans la requête
     const url = new URL(request.url);
     const mangaId = url.searchParams.get('mangaId');
 
-    if (!mangaId || !mongoose.Types.ObjectId.isValid(mangaId)) {
-      return NextResponse.json({ error: 'Manga ID valide est requis' }, { status: 400 });
+    if (mangaId) {
+      // Vérifie si le mangaId est valide
+      if (!mongoose.Types.ObjectId.isValid(mangaId)) {
+        return NextResponse.json({ error: 'Manga ID invalide' }, { status: 400 });
+      }
+
+      // Retourne les chapitres associés au mangaId
+      const chapters = await Chapter.find({ manga: mangaId }).exec();
+      return NextResponse.json(chapters, { status: 200 });
     }
 
-    const chapters = await Chapter.find({ manga: mangaId }).exec();
+    // Si aucun mangaId n’est fourni, retourne tous les mangas avec le nombre de chapitres associés
+    const mangas = await Manga.aggregate([
+      {
+        $lookup: {
+          from: 'chapters', // Nom de la collection de chapitres
+          localField: '_id',
+          foreignField: 'manga',
+          as: 'chapters',
+        },
+      },
+      {
+        $addFields: {
+          chapterCount: { $size: '$chapters' }, // Ajoute le nombre de chapitres
+        },
+      },
+      {
+        $project: {
+          chapters: 0, // Exclut les chapitres eux-mêmes du résultat pour alléger la réponse
+        },
+      },
+    ]);
 
-    return NextResponse.json(chapters, { status: 200 });
+    return NextResponse.json(mangas, { status: 200 });
   } catch (error) {
-    console.error('Erreur lors de la récupération des Chapitres :', error);
-    return NextResponse.json({ error: 'Échec de récupération des Chapitres' }, { status: 500 });
+    console.error('Erreur lors de la récupération des Mangas ou Chapitres :', error);
+    return NextResponse.json({ error: 'Échec de récupération des données' }, { status: 500 });
   }
 }
 

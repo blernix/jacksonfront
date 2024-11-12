@@ -72,7 +72,7 @@ const ChapterPage = async ({ params }) => {
         )}
       </Box>
 
-      <Footer />
+      
     </Container>
   );
 };

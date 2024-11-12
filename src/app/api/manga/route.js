@@ -29,7 +29,7 @@ export async function OPTIONS() {
   return new Response(null, {
       status: 204,
     headers: {
-      'Access-Control-Allow-Origin': 'http://localhost:8100',
+      'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS, PATCH',
       'Access-Control-Allow-Headers': 'Content-Type, Authorization',
       'Access-Control-Allow-Credentials': 'true',
@@ -37,13 +37,37 @@ export async function OPTIONS() {
   });
 }
 
-// Route GET - Récupérer tous les mangas
+// Route GET racine - Récupérer tous les mangas avec le nombre de chapitres associés
 export async function GET(request) {
-  await connectToDatabase();
+  try {
+    await connectToDatabase();
 
-  const mangas = await Manga.find({}).sort({ title: 1 });
+    const mangas = await Manga.aggregate([
+      {
+        $lookup: {
+          from: 'chapters', // Nom de la collection de chapitres
+          localField: '_id',
+          foreignField: 'manga',
+          as: 'chapters',
+        },
+      },
+      {
+        $addFields: {
+          chapterCount: { $size: '$chapters' }, // Ajoute le nombre de chapitres
+        },
+      },
+      {
+        $project: {
+          chapters: 0, // Exclut les chapitres eux-mêmes du résultat pour alléger la réponse
+        },
+      },
+    ]);
 
-  return NextResponse.json(mangas, { status: 200 });
+    return NextResponse.json(mangas, { status: 200 });
+  } catch (error) {
+    console.error('Erreur lors de la récupération des Mangas :', error);
+    return NextResponse.json({ error: 'Échec de récupération des Mangas' }, { status: 500 });
+  }
 }
 
 // Route POST - Créer un nouveau manga

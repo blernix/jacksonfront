@@ -35,11 +35,14 @@ const MangaDetailPage = async ({ params }) => {
   if (!data) notFound();
 
   return (
-    <Container maxWidth="md" sx={{ py: 5 }}>
-      <Navbar />
+    <>
+      <Container maxWidth="md" sx={{ py: 5 }}>
+        <Navbar />
       <MangaDetailContent manga={data.manga} chapters={data.chapters} />
+      
+      </Container>
       <Footer />
-    </Container>
+    </>
   );
 };
 

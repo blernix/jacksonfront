@@ -14,17 +14,17 @@ const MangaDetailContent = ({ manga, chapters }) => {
   return (
     <>
       {/* Manga Information */}
-      <Box mb={4} textAlign="center" position="relative">
-        <Typography variant="h3" component="h1" gutterBottom>
+      <Box mb={6} textAlign="center" position="relative" color="#d9d9d9">
+        <Typography variant="h3" component="h1" gutterBottom sx={{ fontWeight: 'bold', color: '#ffffff' }}>
           {manga.title}
         </Typography>
-        <Typography variant="subtitle1" color="textSecondary">
+        <Typography variant="subtitle1" color="#b3b3b3">
           Par {manga.author}
         </Typography>
 
-        <Box position="relative" display="inline-block">
+        <Box position="relative" display="inline-block" mt={4}>
           {manga.coverImage && (
-           <Image src={manga.coverImage} alt={manga.title} layout="responsive" width={500} height={300} />
+            <Image src={manga.coverImage} alt={manga.title} layout="responsive" width={500} height={300} style={{ borderRadius: '8px' }} />
           )}
           
           {/* Button to reveal description */}
@@ -35,8 +35,8 @@ const MangaDetailContent = ({ manga, chapters }) => {
               bottom: 10,
               right: 10,
               backgroundColor: 'rgba(0, 0, 0, 0.5)',
-              color: '#fff',
-              zIndex: 2, // Ensure the button stays above other elements
+              color: '#ffffff',
+              zIndex: 2,
               '&:hover': { backgroundColor: 'rgba(0, 0, 0, 0.7)' },
             }}
           >
@@ -49,13 +49,13 @@ const MangaDetailContent = ({ manga, chapters }) => {
               position="absolute"
               bottom={0}
               width="100%"
-              maxHeight="60%" // Limit the height of the description
-              bgcolor="rgba(0, 0, 0, 0.7)"
-              color="#fff"
+              maxHeight="60%"
+              bgcolor="rgba(0, 0, 0, 0.8)"
+              color="#ffffff"
               p={2}
               sx={{
                 borderRadius: '0 0 8px 8px',
-                overflowY: 'auto', // Enable scroll if content is too large
+                overflowY: 'auto',
                 transition: 'opacity 0.3s ease-in-out',
               }}
             >
@@ -71,12 +71,12 @@ const MangaDetailContent = ({ manga, chapters }) => {
 
       {/* Chapters */}
       <Box mt={6}>
-        <Typography variant="h4" gutterBottom>
+        <Typography variant="h4" gutterBottom sx={{ color: '#d9d9d9', textAlign: 'center' }}>
           Chapitres
         </Typography>
-        <Grid container spacing={4}>
+        <Grid container spacing={4} mt={4}>
           {chapters.length === 0 ? (
-            <Typography variant="body1" color="textSecondary">
+            <Typography variant="body1" color="#b3b3b3" textAlign="center" width="100%">
               Aucun chapitre disponible pour ce manga.
             </Typography>
           ) : (
@@ -89,10 +89,11 @@ const MangaDetailContent = ({ manga, chapters }) => {
                       display: 'flex',
                       flexDirection: 'column',
                       borderRadius: 3,
-                      boxShadow: 3,
-                      transition: 'transform 0.3s',
-                      '&:hover': { transform: 'translateY(-5px)', boxShadow: 6 },
-                      backgroundColor: '#ffffff',
+                      boxShadow: '0px 5px 15px rgba(0, 0, 0, 0.3)',
+                      transition: 'transform 0.3s, box-shadow 0.3s',
+                      '&:hover': { transform: 'translateY(-5px)', boxShadow: '0px 10px 20px rgba(0, 119, 182, 0.4)' },
+                      backgroundColor: '#1a1a1a',
+                      color: '#ffffff',
                     }}
                   >
                     <CardContent sx={{ flexGrow: 1 }}>
@@ -100,16 +101,24 @@ const MangaDetailContent = ({ manga, chapters }) => {
                         gutterBottom
                         variant="h5"
                         component="h2"
-                        sx={{ color: '#1976d2', fontWeight: 'bold' }}
+                        sx={{ color: '#0077b6', fontWeight: 'bold' }}
                       >
                         {chapter.chapterTitle}
                       </Typography>
-                      <Typography variant="subtitle2" color="textSecondary">
+                      <Typography variant="subtitle2" sx={{ color: '#b3b3b3' }}>
                         Chapitre {chapter.chapterNumber}
                       </Typography>
                     </CardContent>
                     <Box sx={{ p: 2, pt: 0 }}>
-                      <Button variant="contained" color="primary" fullWidth>
+                      <Button
+                        variant="contained"
+                        fullWidth
+                        sx={{
+                          backgroundColor: '#0077b6',
+                          color: '#ffffff',
+                          '&:hover': { backgroundColor: '#005f87' },
+                        }}
+                      >
                         Lire le Chapitre
                       </Button>
                     </Box>
@@ -120,6 +129,7 @@ const MangaDetailContent = ({ manga, chapters }) => {
           )}
         </Grid>
       </Box>
+    
     </>
   );
 };

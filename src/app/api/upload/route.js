@@ -76,6 +76,7 @@ export async function POST(request) {
     const fileName = `${uuidv4()}_${originalFileName}`;
 
     // Définir le dossier de destination en fonction du type
+    console.log("Type de fichier:", type);
     const destination = `${type}/${fileName}`;
     const blobFile = bucket.file(destination);
 

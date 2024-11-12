@@ -1,15 +1,14 @@
 'use client';
 import React, { useState, useEffect, useRef } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation, A11y } from 'swiper/modules'; // Suppression de Pagination
+import { Navigation, A11y } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/navigation';
-import { Box, Typography, IconButton, LinearProgress, Button } from '@mui/material';
+import { Box, IconButton, LinearProgress, Button } from '@mui/material';
 import FullscreenIcon from '@mui/icons-material/Fullscreen';
 import FullscreenExitIcon from '@mui/icons-material/FullscreenExit';
 import Link from 'next/link';
 import Image from 'next/image';
-
 
 const ChapterViewer = ({ pages, nextChapterUrl }) => {
   const [isFullScreen, setIsFullScreen] = useState(false);
@@ -17,7 +16,7 @@ const ChapterViewer = ({ pages, nextChapterUrl }) => {
   const swiperRef = useRef(null);
   const viewerRef = useRef(null);
 
-  // Activer/Désactiver le mode plein écran avec l'API
+  // Toggle full screen mode
   const toggleFullScreen = () => {
     if (!isFullScreen && viewerRef.current.requestFullscreen) {
       viewerRef.current.requestFullscreen();
@@ -26,7 +25,6 @@ const ChapterViewer = ({ pages, nextChapterUrl }) => {
     }
   };
 
-  // Mettre à jour l’état du plein écran
   useEffect(() => {
     const handleFullScreenChange = () => {
       setIsFullScreen(!!document.fullscreenElement);
@@ -47,10 +45,9 @@ const ChapterViewer = ({ pages, nextChapterUrl }) => {
         backgroundColor: 'black',
         color: 'white',
         overflow: 'hidden',
-        borderRadius: isFullScreen ? '0' : '8px',
       }}
     >
-      {/* Bouton de plein écran */}
+      {/* Fullscreen Button */}
       <IconButton
         onClick={toggleFullScreen}
         sx={{
@@ -59,14 +56,15 @@ const ChapterViewer = ({ pages, nextChapterUrl }) => {
           right: 16,
           color: '#fff',
           zIndex: 10,
-          backgroundColor: 'rgba(0, 0, 0, 0.5)',
-          '&:hover': { backgroundColor: 'rgba(0, 0, 0, 0.7)' },
+          backgroundColor: 'rgba(0, 0, 0, 0.3)',
+          '&:hover': { backgroundColor: 'rgba(0, 0, 0, 0.5)' },
+          display: isFullScreen ? 'none' : 'block', // Masqué en plein écran
         }}
       >
         {isFullScreen ? <FullscreenExitIcon /> : <FullscreenIcon />}
       </IconButton>
 
-      {/* Barre de progression */}
+      {/* Progress Bar at Bottom */}
       <LinearProgress
         variant="determinate"
         value={(currentPage / pages.length) * 100}
@@ -75,20 +73,21 @@ const ChapterViewer = ({ pages, nextChapterUrl }) => {
           bottom: 0,
           left: 0,
           right: 0,
-          height: 4,
+          height: 2,
           backgroundColor: 'rgba(255, 255, 255, 0.1)',
           '& .MuiLinearProgress-bar': { backgroundColor: '#1976d2' },
         }}
       />
 
+      {/* Swiper for Pages */}
       <Swiper
         ref={swiperRef}
         modules={[Navigation, A11y]}
         navigation
         spaceBetween={50}
         slidesPerView={1}
-        onSlideChange={(swiper) => setCurrentPage(swiper.activeIndex + 1)} // Mise à jour de la page actuelle
-        style={{ height: '100%' }}
+        onSlideChange={(swiper) => setCurrentPage(swiper.activeIndex + 1)}
+        style={{ height: '100%', paddingTop: isFullScreen ? '20px' : '0' }}
       >
         {pages.map((page, index) => (
           <SwiperSlide key={index}>
@@ -98,29 +97,38 @@ const ChapterViewer = ({ pages, nextChapterUrl }) => {
                 alignItems: 'center',
                 justifyContent: 'center',
                 height: '100%',
+                padding: isFullScreen ? '20px' : '0',
               }}
             >
-           <Image
-  src={page}
-  alt={`Page ${index + 1}`}
-  layout="responsive"
-  width={500}
-  height={700} // ajustez selon le format d'affichage souhaité
-  style={{
-    borderRadius: '8px',
-    margin: '0 auto',
-  }}
-/>
+              <Image
+                src={page}
+                alt={`Page ${index + 1}`}
+                layout="responsive"
+                width={500}
+                height={700}
+                style={{
+                  margin: '0 auto',
+                  borderRadius: isFullScreen ? '0' : '8px',
+                  boxShadow: isFullScreen ? 'none' : '0 0 10px rgba(255, 255, 255, 0.2)',
+                }}
+              />
             </Box>
           </SwiperSlide>
         ))}
       </Swiper>
 
-      {/* Lien vers le chapitre suivant */}
+      {/* Next Chapter Link */}
       {currentPage === pages.length && nextChapterUrl && (
         <Box sx={{ textAlign: 'center', mt: 4 }}>
           <Link href={nextChapterUrl} passHref>
-            <Button variant="contained" color="primary">
+            <Button
+              variant="contained"
+              sx={{
+                backgroundColor: '#1976d2',
+                mt: 2,
+                '&:hover': { backgroundColor: '#005f87' },
+              }}
+            >
               Lire le chapitre suivant
             </Button>
           </Link>

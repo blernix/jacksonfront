@@ -1,14 +1,14 @@
 import mongoose from 'mongoose';
 
 const CategorySchema = new mongoose.Schema({
-  name: {
+  title: {
     type: String,
     unique: true,
     required: true,
+    trim: true,
   },
 }, { collection: 'categories' });
 
-// Vérifiez si le modèle existe déjà avant de le compiler
 const Category = mongoose.models.Category || mongoose.model('Category', CategorySchema);
 
 export default Category;
